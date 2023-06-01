@@ -1,8 +1,20 @@
 #https://github.com/opencv/opencv/tree/master/data/haarcascades
 
-Haar Cascade je strojno učen algoritem, ki temelji na uporabi različnih značilk (haar značilk), ki jih je mogoče naučiti prepoznati specifične vzorce v slikah.
-Algoritem Haar Cascade združuje te značilke v klasifikator, ki se nato uporablja za iskanje teh vzorcev v novih slikah.
+Haar Cascade je strojno učen algoritem
 
-V primeru haarcascade_frontalface_default.xml gre za Haar Cascade klasifikator, ki je naučen prepoznati frontalne obraze.
-Ta datoteka vsebuje informacije o mnogih značilkah obraza, ki jih je algoritem naučil, vključno z obliko, teksturo, razmerji med svetlimi in temnimi območji itd.
-Te značilke se uporabljajo za prepoznavanje tipičnih vzorcev, ki se pojavljajo na obrazih, kot so oči, nos, usta, brada itd
+Mapa images shranjene slike od userjev direkt iz telefona
+images
+   -> user1
+   -> user2
+
+Mapa PersonDoesNotExist v njej slike oseb ki ne obstajajo
+
+
+Mapa FaceDetection tam so vsi obrazi shranjeni od PersonDoesNotExist in od uporabnikov
+FaceDetection
+   -> user1
+   -> user2
+   -> PersonDoesNotExit
+
+
+
