@@ -1,4 +1,6 @@
+import tensorflow as tf
 import os
+import cv2
 
 userId = "3122312321"  # dobimo iz app
 users_folder = f"TrainImages/User_{userId}"  # Pot do glavne mape z uporabniki
@@ -6,25 +8,27 @@ users_folder = f"TrainImages/User_{userId}"  # Pot do glavne mape z uporabniki
 user_id_folder = os.path.join(users_folder, userId)  # Pot do mape z uporabnikovimi slikami
 person_does_not_exist_folder = os.path.join(users_folder, "PersonDoesNotExist")  # Pot do mape s slikami, kjer oseba ne obstaja
 
-user_images = []  # Seznam poti do slik uporabnika
-person_does_not_exist_images = []  # Seznam poti do slik, kjer oseba ne obstaja
+# Seznam poti do slik uporabnika
+user_images = [os.path.join(user_id_folder, image) for image in os.listdir(user_id_folder)]
 
-# Pridobitev poti do slik uporabnika
-for filename in os.listdir(user_id_folder):
-    if filename.endswith(".jpg"):
-        user_images.append(os.path.join(user_id_folder, filename))
+# Seznam poti do slik, kjer oseba ne obstaja
+person_does_not_exist_images = [os.path.join(person_does_not_exist_folder, image) for image in os.listdir(
+    person_does_not_exist_folder)]
 
-# Pridobitev poti do slik, kjer oseba ne obstaja
-for filename in os.listdir(person_does_not_exist_folder):
-    if filename.endswith(".jpg"):
-        person_does_not_exist_images.append(os.path.join(person_does_not_exist_folder, filename))
+matrikaUcna = []
+ciljna_velikost = (400, 400)
 
-# Izpis poti do slik uporabnika
-print("Slike uporabnika:")
 for image_path in user_images:
-    print(image_path)
+    image_name = os.path.basename(image_path)  # Dobimo ime slike
+    slika = cv2.imread(image_path)
+    obrezana_slika = cv2.resize(slika, ciljna_velikost)
+    matrikaUcna.append([obrezana_slika, 0])
 
-# Izpis poti do slik, kjer oseba ne obstaja
-print("Slike, kjer oseba ne obstaja:")
-for image_path in person_does_not_exist_images:
-    print(image_path)
+for imagePDNE_path in person_does_not_exist_images:
+    image_name = os.path.basename(imagePDNE_path)  # Dobimo ime slike
+    slika = cv2.imread(imagePDNE_path)
+    obrezana_slika = cv2.resize(slika, ciljna_velikost)
+    matrikaUcna.append([obrezana_slika, 1])
+
+for slika in matrikaUcna:
+    print(slika[0], slika[1])
