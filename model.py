@@ -2,6 +2,7 @@ import tensorflow as tf
 import os
 import cv2
 import numpy as np
+from skimage.feature import hog, local_binary_pattern
 
 def dodajtag(user_id_folder, person_does_not_exist_folder):
     # Seznam poti do slik uporabnika
@@ -47,15 +48,45 @@ def lbp(sivinska_slika):
             vrednosti_sosedov_bin = [int(v >= center) for v in vrednosti_sosedov]
             # binarna vrednost pomnozi z  2^8 ter nato seštejejo
             lbp_vrednost = sum([vrednosti_sosedov_bin[k] * (2**k) for k in range(8)])
-            lbp_slika[i, j] = lbp_vrednost  # Izračunana lbp vrednost shrani v matriko na ustrezni položaj
+            lbp_slika[i, j] = lbp_vrednost #Izračunana lbp vrednost shrani v matriko na ustrezni položaj
 
     # Izračun histograma LBP slikovne značilnice
-    histogram, _ = np.histogram(lbp_slika.ravel(), bins=np.arange(256 + 1), range=(0, 256)) # 1d, meje vrednosti, območje vrednosti
-    histogram = histogram.astype("float")  # decimal
-    # Normalizacija histograma
-    histogram /= (histogram.sum() + 1e-7)  # vsota vrednosti -> vsako število v h deli s to vsoto
+    histogram, _ = np.histogram(lbp_slika.ravel(), bins=np.arange(256 + 1), range=(0, 256)) #1d, meje vrednosti, območje vrednosti
+    histogram = histogram.astype("float") #decimal
+    #Normalizacija histograma
+    histogram /= (histogram.sum() + 1e-7) # vsota vrednosti -> vsako število v h deli s to vsoto
 
     return histogram
+
+def izracunaj_hog(slika, vel_celice, vel_blok, razdelki):
+    # Izračunaj značilnice HOG
+    hog_značilnice, _ = hog(slika, orientations=razdelki, pixels_per_cell=(vel_celice, vel_celice),
+                            cells_per_block=(vel_blok, vel_blok), block_norm='L2-Hys', visualize=True)
+    return hog_značilnice
+
+def izlušči_značilnice(matrika):
+    značilnice = []
+    vel_celice = 4
+    vel_blok = 2  # Koliko celic je v enem bloku
+    razdelki = 15
+
+    for slika in matrika:
+        slikadobljena, oznaka = slika
+        slika_siva = cv2.cvtColor(slikadobljena, cv2.COLOR_BGR2GRAY) #nastavi na gray
+
+        # Izlušči značilnice LBP
+        lbp_značilnice = lbp(slika_siva)
+
+        # Izlušči značilnice HOG
+        hog_značilnice = izracunaj_hog(slika_siva, vel_celice, vel_blok, razdelki)
+
+        # Združi značilnice LBP in HOG
+        značilnice_slike = np.concatenate((lbp_značilnice, hog_značilnice))
+
+        značilnice.append(značilnice_slike)
+        #print(značilnice)
+
+    return np.array(značilnice)
 
 
 userId = "3122312321"  # dobimo iz app
@@ -66,9 +97,12 @@ person_does_not_exist_folder = os.path.join(users_folder, "PersonDoesNotExist") 
 
 matrikaUcna = dodajtag(user_id_folder, person_does_not_exist_folder)
 oznake_ucne = [slika[1] for slika in matrikaUcna]
-print(oznake_ucne)
+# print(oznake_ucne)
 
 '''
 for slika in matrikaUcna:
     print(slika[0], slika[1])
 '''
+
+matrika_značilk_ucne = izlušči_značilnice(matrikaUcna)
+print(matrika_značilk_ucne)
