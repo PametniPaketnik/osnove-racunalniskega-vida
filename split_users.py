@@ -2,7 +2,7 @@ import os
 import shutil
 
 # Ustvarite ime in pot do nove mape
-userId = "3122312321" # dobimo iz app
+userId = "646d0c1fa7d8e13e080352d7" # dobimo iz app
 newUser_folder = "User_" + userId #Nova mapa
 
 # Poti do map kjer imamo ze narejene obraze

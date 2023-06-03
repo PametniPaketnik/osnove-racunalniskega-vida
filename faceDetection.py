@@ -1,7 +1,7 @@
 import cv2
 import os
 
-user = "3122312321" #Dobljen podatek iz app keri user prijavil
+user = "646d0c1fa7d8e13e080352d7" #Dobljen podatek iz app keri user prijavil
 # user_str = str(user) # Pripravljeno kak za kak shranjujemo ker ne vem če id al username
 
 image_folder = "images/sabina" # Pot do mape s slikami
