@@ -1,8 +1,10 @@
 import tensorflow as tf
+import pickle
 import os
 import cv2
 import numpy as np
 from skimage.feature import hog, local_binary_pattern
+from sklearn import svm
 
 def dodajtag(user_id_folder, person_does_not_exist_folder):
     # Seznam poti do slik uporabnika
@@ -105,4 +107,14 @@ for slika in matrikaUcna:
 '''
 
 matrika_značilk_ucne = izlušči_značilnice(matrikaUcna)
-print(matrika_značilk_ucne)
+#print(matrika_značilk_ucne)
+
+# Ustvarjanje modelov
+svm_model = svm.SVC(kernel='linear')
+
+# Učenje SVM modela na učni množici
+svm_model.fit(matrika_značilk_ucne, oznake_ucne)
+
+filename = f'Model/svm_model_{userId}.pkl' #model se poimenuje po idju od userja
+with open(filename, 'wb') as f:
+    pickle.dump(svm_model, f)
