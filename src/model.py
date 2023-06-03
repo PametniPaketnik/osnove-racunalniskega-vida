@@ -92,7 +92,7 @@ def izlušči_značilnice(matrika):
 
 
 userId = "646d0c1fa7d8e13e080352d7"  # dobimo iz app
-users_folder = f"TrainImages/User_{userId}"  # Pot do glavne mape z uporabniki
+users_folder = f"../images/TrainImages/User_{userId}"  # Pot do glavne mape z uporabniki
 
 user_id_folder = os.path.join(users_folder, userId)  # Pot do mape z uporabnikovimi slikami
 person_does_not_exist_folder = os.path.join(users_folder, "PersonDoesNotExist")  # Pot do mape s slikami, kjer oseba ne obstaja
@@ -115,6 +115,6 @@ svm_model = svm.SVC(kernel='linear')
 # Učenje SVM modela na učni množici
 svm_model.fit(matrika_značilk_ucne, oznake_ucne)
 
-filename = f'Model/{userId}.pkl' #model se poimenuje po idju od userja
+filename = f'../Model/{userId}.pkl' #model se poimenuje po idju od userja
 with open(filename, 'wb') as f:
     pickle.dump(svm_model, f)
