@@ -12,7 +12,7 @@ def lbp(sivinska_slika):
     lbp_slika = np.zeros((visina, sirina), dtype=np.uint8)
     for i in range(1, visina-1):
         for j in range(1, sirina-1):
-            center = sivinska_slika[i, j]  # središčna vrednost
+            center = sivinska_slika[i, j] # središčna vrednost
             # vrednosti sosedov centra se določijo levo, desno, gor, dolj
             vrednosti_sosedov = [
                 sivinska_slika[i-1, j-1], sivinska_slika[i-1, j], sivinska_slika[i-1, j+1],
@@ -23,21 +23,21 @@ def lbp(sivinska_slika):
             vrednosti_sosedov_bin = [int(v >= center) for v in vrednosti_sosedov]
             # binarna vrednost pomnozi z  2^8 ter nato seštejejo
             lbp_vrednost = sum([vrednosti_sosedov_bin[k] * (2**k) for k in range(8)])
-            lbp_slika[i, j] = lbp_vrednost  # Izračunana lbp vrednost shrani v matriko na ustrezni položaj
+            lbp_slika[i, j] = lbp_vrednost #Izračunana lbp vrednost shrani v matriko na ustrezni položaj
 
     # Izračun histograma LBP slikovne značilnice
-    histogram, _ = np.histogram(lbp_slika.ravel(), bins=np.arange(256 + 1), range=(0, 256))  # 1d, meje vrednosti, območje vrednosti
-    histogram = histogram.astype("float")  # decimal
-    # Normalizacija histograma
-    histogram /= (histogram.sum() + 1e-7)  # vsota vrednosti -> vsako število v h deli s to vsoto
+    histogram, _ = np.histogram(lbp_slika.ravel(), bins=np.arange(256 + 1), range=(0, 256)) #1d, meje vrednosti, območje vrednosti
+    histogram = histogram.astype("float") #decimal
+    #Normalizacija histograma
+    histogram /= (histogram.sum() + 1e-7) # vsota vrednosti -> vsako število v h deli s to vsoto
 
     return histogram
-
 
 def izracunaj_hog(slika, vel_celice, vel_blok, razdelki):
     # Izračunaj značilnice HOG
     hog_značilnice, _ = hog(slika, orientations=razdelki, pixels_per_cell=(vel_celice, vel_celice),
                             cells_per_block=(vel_blok, vel_blok), block_norm='L2-Hys', visualize=True)
+    return hog_značilnice
 
 
 def izlušči_značilnice(matrika):
@@ -48,7 +48,7 @@ def izlušči_značilnice(matrika):
 
     for slika in matrika:
         slikadobljena, oznaka = slika
-        slika_siva = cv2.cvtColor(slikadobljena, cv2.COLOR_BGR2GRAY) # nastavi na gray
+        slika_siva = cv2.cvtColor(slikadobljena, cv2.COLOR_BGR2GRAY) #nastavi na gray
 
         # Izlušči značilnice LBP
         lbp_značilnice = lbp(slika_siva)
@@ -60,7 +60,7 @@ def izlušči_značilnice(matrika):
         značilnice_slike = np.concatenate((lbp_značilnice, hog_značilnice))
 
         značilnice.append(značilnice_slike)
-        # print(značilnice)
+        #print(značilnice)
 
     return np.array(značilnice)
 
