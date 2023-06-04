@@ -10,7 +10,7 @@ import functions
 def main():
     args = functions.get_login_args()
 
-    if args.id is None or args.imgpath is None or args.outputpath is None:
+    if args.id is None or args.imgpath is None or args.outputpath is None or args.haarcascade is None:
         print("Problem z argumenti")
         return None
 
@@ -24,7 +24,11 @@ def main():
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Ustvari detektor obrazov
-    face_cascade = cv2.CascadeClassifier("../haarcascade_frontalface_default.xml")
+    # try:
+    face_cascade = cv2.CascadeClassifier(args.haarcascade)
+    #except:
+    #   print("Napaka pri odpiranju haarcascade_frontalface_default!")
+    #   return None
 
     # Zazna obraz na sliki
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20,)
