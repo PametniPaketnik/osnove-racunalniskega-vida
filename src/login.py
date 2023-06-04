@@ -23,7 +23,6 @@ def main():
     output_path = args.outputpath
 
     # Naloži sliko
-    print(image_path)
     image = cv2.imread(image_path)
 
     # Ustvari detektor obrazov
@@ -41,7 +40,6 @@ def main():
         print("An error occurred:", error_message)
         return None
 
-
     # Preveri, ali je bil obraz zaznan
     if len(faces) > 0: # Izreži prvi zaznani obraz
         (x, y, w, h) = faces[0]
@@ -49,9 +47,10 @@ def main():
 
         # Shrani izrezan obraz na izhodno mesto
         cv2.imwrite(output_path, face_image)
-        print("Obraz je bil shranjen.")
+        # print("Obraz je bil shranjen.")
     else:
         print("Na sliki ni bilo zaznanega obraza.")
+        return None
 
     matrikaSlika = []
     ciljna_velikost = (400, 400)
@@ -65,9 +64,10 @@ def main():
         if slika is not None:
             obrezana_slika = cv2.resize(slika, ciljna_velikost)
             matrikaSlika.append([obrezana_slika, 0])
-            print(f"Slika {image_name} je bila uspešno dodana v matriko.")
+            # print(f"Slika {image_name} je bila uspešno dodana v matriko.")
         else:
             print(f"Napaka pri nalaganju slike {image_name}.")
+            return None
 
     značilnice = [slika[0] for slika in matrikaSlika]
     oznake_ucne = [slika[1] for slika in matrikaSlika]
@@ -77,7 +77,6 @@ def main():
 
     # Branje modela iz datoteke
     model_path = f"{directory}/Model/{args.id}.pkl"
-    print(model_path)
 
     try:
         with open(model_path, "rb") as file:
@@ -92,9 +91,10 @@ def main():
     # Primerjava napovedi z oznakami
     for napoved, oznaka in zip(napovedi, oznake_ucne):
         if napoved == oznaka:
-            print("Napoved je pravilna.")
+            print(True)
         else:
             print("Napoved je napačna.")
+            print(False)
 
 if __name__ == "__main__":
     main()
