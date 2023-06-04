@@ -1,8 +1,25 @@
 import cv2
 import numpy as np
+import argparse
 from skimage.feature import hog
 import os
 
+def get_login_args():
+    parser = parser = argparse.ArgumentParser()
+
+    parser.add_argument('--id', help='ID name')
+    parser.add_argument('--imgpath', help='ID name')
+    parser.add_argument('--outputpath', help='ID name')
+
+    return parser.parse_args()
+
+def get_model_args():
+    parser = parser = argparse.ArgumentParser()
+
+    parser.add_argument('--id', help='ID name')
+    parser.add_argument('--usersfolder', help='ID name')
+
+    return parser.parse_args()
 
 def lbp(sivinska_slika):
     # Določanje velikosti slike
