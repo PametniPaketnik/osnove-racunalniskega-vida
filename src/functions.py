@@ -10,7 +10,6 @@ def get_login_args():
     parser.add_argument('--id', help='ID name')
     parser.add_argument('--imgpath', help='Img path')
     parser.add_argument('--outputpath', help='Output path')
-    parser.add_argument('--haarcascade', help='Haarcascade file path')
 
     return parser.parse_args()
 
