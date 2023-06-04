@@ -13,25 +13,37 @@ def main():
     if args.id is None or args.imgpath is None or args.outputpath is None:
         print("Problem z argumenti")
         return None
+    
+    current_path = os.getcwd()
+    directory = os.path.dirname(os.path.dirname(current_path))
+    directory = f"{directory}/osnove-racunalniskega-vida"
+    haarcascade_path = f"{directory}/src/haarcascade_frontalface_default.xml"
 
     image_path = args.imgpath
     output_path = args.outputpath
 
     # Naloži sliko
+    print(image_path)
     image = cv2.imread(image_path)
 
-    # Pretvori sliko v sivinsko obliko
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
     # Ustvari detektor obrazov
-    face_cascade = cv2.CascadeClassifier("../haarcascade_frontalface_default.xml")
+    try:
+        # Pretvori sliko v sivinsko obliko
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Zazna obraz na sliki
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20,)
+        face_cascade = cv2.CascadeClassifier(haarcascade_path)
+
+        # Zazna obraz na sliki
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20,)
+    except Exception as e:
+        # Handling the exception and accessing the error message
+        error_message = str(e)
+        print("An error occurred:", error_message)
+        return None
+
 
     # Preveri, ali je bil obraz zaznan
-    if len(faces) > 0:
-        # Izreži prvi zaznani obraz
+    if len(faces) > 0: # Izreži prvi zaznani obraz
         (x, y, w, h) = faces[0]
         face_image = image[y:y+h, x:x+w]
 
@@ -64,11 +76,14 @@ def main():
     matrika_značilk_ucne = functions.izlušči_značilnice(matrikaSlika)
 
     # Branje modela iz datoteke
+    model_path = f"{directory}/Model/{args.id}.pkl"
+    print(model_path)
+
     try:
-        with open(f"../Model/{args.id}.pkl", "rb") as file:
+        with open(model_path, "rb") as file:
             svm_model = pickle.load(file)
     except:
-        print("Napaka pri odpiranju modela!")
+        print("Model ne obstaja")
         return None
 
     # Napovedovanje z modelom
