@@ -7,25 +7,14 @@ from skimage.feature import hog, local_binary_pattern
 from sklearn import svm
 import functions
 
-def get_args():
-    parser = parser = argparse.ArgumentParser()
-
-    parser.add_argument('--id', help='ID name')
-    parser.add_argument('--imgpath', help='ID name')
-    parser.add_argument('--outputpath', help='ID name')
-
-    return parser.parse_args()
-
 def main():
-    args = get_args()
+    args = functions.get_login_args()
 
     if args.id is None or args.imgpath is None or args.outputpath is None:
         print("Problem z argumenti")
         return None
 
-    # image_path = "../images/IMG_8296.jpg"  # Pot do slike
     image_path = args.imgpath
-    # output_path = "../images/obraz2.jpg"  # Pot do izhodne slike z obrazom
     output_path = args.outputpath
 
     # Naloži sliko
@@ -70,12 +59,11 @@ def main():
 
     značilnice = [slika[0] for slika in matrikaSlika]
     oznake_ucne = [slika[1] for slika in matrikaSlika]
-    print(značilnice)
+    # print(značilnice)
 
     matrika_značilk_ucne = functions.izlušči_značilnice(matrikaSlika)
 
     # Branje modela iz datoteke
-    # with open("../Model/646d0c1fa7d8e13e080352d7.pkl", "rb") as file:
     try:
         with open(f"../Model/{args.id}.pkl", "rb") as file:
             svm_model = pickle.load(file)
