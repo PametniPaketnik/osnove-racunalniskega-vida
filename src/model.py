@@ -9,6 +9,11 @@ import functions
 
 def main():
     args = functions.get_model_args()
+
+    if args.id is None or args.usersfolder is None:
+        print("Problem z argumenti")
+        return None
+
     userId = args.id
     users_folder = f"{args.usersfolder}/User_{userId}"
 
