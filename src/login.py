@@ -14,13 +14,17 @@ def main():
         print("Problem z argumenti")
         return None
     
-    current_path = os.getcwd()
-    directory = os.path.dirname(os.path.dirname(current_path))
-    directory = f"{directory}/osnove-racunalniskega-vida"
-    haarcascade_path = f"{directory}/src/haarcascade_frontalface_default.xml"
+    #current_path = os.getcwd()
+    #directory = os.path.dirname(os.path.dirname(current_path))
+    #directory = f"{directory}/osnove-racunalniskega-vida"
+    haarcascade_path = "haarcascade_frontalface_default.xml"
+    #print(haarcascade_path)
 
-    image_path = args.imgpath
-    output_path = args.outputpath
+    image_path = args.imgpath.strip("'")
+    #print(image_path)
+    output_path = args.outputpath.strip("'")
+    #print(output_path)
+    #print("mjaw")
 
     # Naloži sliko
     image = cv2.imread(image_path)
@@ -29,8 +33,14 @@ def main():
     try:
         # Pretvori sliko v sivinsko obliko
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        #print(gray)
 
-        face_cascade = cv2.CascadeClassifier(haarcascade_path)
+        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+
+        #if face_cascade.empty():
+            # print("Kaskadni klasifikator ni bil uspešno naložen.")
+        #else:
+            # print("Kaskadni klasifikator je bil uspešno naložen.")
 
         # Zazna obraz na sliki
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20,)
@@ -76,7 +86,8 @@ def main():
     matrika_značilk_ucne = functions.izlušči_značilnice(matrikaSlika)
 
     # Branje modela iz datoteke
-    model_path = f"{directory}/Model/{args.id}.pkl"
+    model_path = f"D:/FERI/2_letnik/2_semester/paketnik/osnove-racunalniskega-vida/{args.id}.pkl"
+    #print(args.id)
 
     try:
         with open(model_path, "rb") as file:
